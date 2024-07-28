@@ -158,31 +158,22 @@ resource "aws_instance" "app" {
   }
 }
 
-resource "aws_instance" "db" {
-  ami             = var.db_ami_id
-  instance_type   = var.db_instance_type
-  subnet_id       = element(aws_subnet.private_db.*.id, 0)
-  security_groups = [aws_security_group.db.id]
-  key_name        = var.key_name
+resource "aws_db_instance" "default" {
+  allocated_storage    = var.rds_allocated_storage
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = var.rds_instance_class
+  name                 = var.rds_db_name
+  username             = var.rds_username
+  password             = var.rds_password
+  parameter_group_name = "default.mysql5.7"
+  skip_final_snapshot  = true
+  vpc_security_group_ids = [aws_security_group.db.id]
+  db_subnet_group_name = aws_db_subnet_group.main.name
+}
 
-  tags = {
-    Name = "DBServer"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum update -y",
-      "sudo yum install -y mysql-server",
-      "sudo systemctl start mysqld",
-      "sudo systemctl enable mysqld",
-      "mysqladmin -u root password '${var.db_root_password}'"
-    ]
-
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      private_key = file(var.private_key_path)
-      host        = self.public_ip
-    }
-  }
+resource "aws_db_subnet_group" "main" {
+  name       = "main"
+  subnet_ids = [element(aws_subnet.private_db.*.id, 0)]
 }
