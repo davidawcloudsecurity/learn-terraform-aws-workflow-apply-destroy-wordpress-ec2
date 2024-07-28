@@ -153,6 +153,36 @@ resource "aws_instance" "app" {
   security_groups = [aws_security_group.app.id]
   key_name = var.key_name
 
+  user_data = <<EOF
+#!/bin/bash
+# Define the path to the sshd_config file
+sshd_config="/etc/ssh/sshd_config"
+
+# Define the string to be replaced
+old_string="PasswordAuthentication no"
+new_string="PasswordAuthentication yes"
+
+# Check if the file exists
+if [ -e "$sshd_config" ]; then
+    # Use sed to replace the old string with the new string
+    sudo sed -i "s/$old_string/$new_string/" "$sshd_config"
+
+    # Check if the sed command was successful
+    if [ $? -eq 0 ]; then
+        echo "String replaced successfully."
+        # Restart the SSH service to apply the changes
+        sudo service ssh restart
+    else
+        echo "Error replacing string in $sshd_config."
+    fi
+else
+    echo "File $sshd_config not found."
+fi
+
+echo "123" | passwd --stdin ec2-user
+systemctl restart sshd
+EOF
+
   tags = {
     Name = "AppServer-${count.index}"
   }
@@ -169,6 +199,43 @@ resource "aws_instance" "db" {
     Name = "DBServer"
   }
 
+  user_data = <<EOF
+#!/bin/bash
+# Define the path to the sshd_config file
+sshd_config="/etc/ssh/sshd_config"
+
+# Define the string to be replaced
+old_string="PasswordAuthentication no"
+new_string="PasswordAuthentication yes"
+
+# Check if the file exists
+if [ -e "$sshd_config" ]; then
+    # Use sed to replace the old string with the new string
+    sudo sed -i "s/$old_string/$new_string/" "$sshd_config"
+
+    # Check if the sed command was successful
+    if [ $? -eq 0 ]; then
+        echo "String replaced successfully."
+        # Restart the SSH service to apply the changes
+        sudo service ssh restart
+    else
+        echo "Error replacing string in $sshd_config."
+    fi
+else
+    echo "File $sshd_config not found."
+fi
+
+echo "123" | passwd --stdin ec2-user
+systemctl restart sshd
+
+# Install Docker
+yum update -y
+yum install docker -y
+systemctl start docker; systemctl enable docker; docker pull mysql:latest;
+docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=yourpassword -e MYSQL_DATABASE${var.db_root_password} -p 3306:3306 -v mysql-data:/var/lib/mysql -d mysql:latest
+EOF
+
+  /* Remove this as I am not sure how to run this
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
@@ -185,4 +252,5 @@ resource "aws_instance" "db" {
       host        = self.public_ip
     }
   }
+  */
 }
