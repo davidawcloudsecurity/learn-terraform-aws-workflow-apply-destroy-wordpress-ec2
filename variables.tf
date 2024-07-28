@@ -43,23 +43,27 @@ variable "key_name" {
   type        = string
 }
 
-variable "db_ami_id" {
-  description = "The AMI ID for the DB instance"
+variable "rds_allocated_storage" {
+  description = "The allocated storage for the RDS instance"
+  type        = number
+}
+
+variable "rds_instance_class" {
+  description = "The instance class for the RDS instance"
   type        = string
 }
 
-variable "db_instance_type" {
-  description = "The instance type for the DB instance"
+variable "rds_db_name" {
+  description = "The database name for the RDS instance"
   type        = string
 }
 
-variable "db_root_password" {
-  description = "The root password for the DB instance"
+variable "rds_username" {
+  description = "The database username for the RDS instance"
   type        = string
-  sensitive   = true
 }
 
-variable "private_key_path" {
-  description = "Path to the private key for SSH"
+variable "rds_password" {
+  description = "The database password for the RDS instance"
   type        = string
 }
