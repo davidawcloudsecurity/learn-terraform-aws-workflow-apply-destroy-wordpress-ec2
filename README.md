@@ -8,6 +8,8 @@ terraform apply -var-file="terraform.tfvars.json"
 
 how to - https://docs.aws.amazon.com/codedeploy/latest/userguide/tutorials-wordpress.html
 
-how to use github actions with aws access and secret - https://www.pluralsight.com/resources/blog/cloud/how-to-use-github-actions-to-automate-terraform
+how to use github actions with aws access and secret - https://spacelift.io/blog/github-actions-terraform
+
+https://www.pluralsight.com/resources/blog/cloud/how-to-use-github-actions-to-automate-terraform
 
 how to use github actions with openid and sts temp cred - https://xebia.com/blog/how-to-deploy-terraform-to-aws-with-github-actions-authenticated-with-openid-connect/
