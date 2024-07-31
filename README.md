@@ -22,3 +22,5 @@ https://www.pluralsight.com/resources/blog/cloud/how-to-use-github-actions-to-au
 how to use github actions with openid and sts temp cred - https://xebia.com/blog/how-to-deploy-terraform-to-aws-with-github-actions-authenticated-with-openid-connect/
 
 how to use aws s3 and dynamodb to do version control of tfstate - https://medium.com/@Vertexwahn/manage-terraform-state-in-a-aws-dce66788ed1
+
+how to harden git runners - https://blog.gitguardian.com/github-actions-security-cheat-sheet/
