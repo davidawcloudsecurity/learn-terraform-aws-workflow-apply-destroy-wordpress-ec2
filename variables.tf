@@ -41,6 +41,7 @@ variable "instance_count" {
 variable "key_name" {
   description = "The key name to use for the instances"
   type        = string
+  default     = ""
 }
 
 variable "db_ami_id" {
