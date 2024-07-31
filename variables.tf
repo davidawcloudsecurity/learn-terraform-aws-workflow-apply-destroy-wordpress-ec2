@@ -37,13 +37,13 @@ variable "instance_count" {
   description = "Number of instances for each role"
   type        = number
 }
-
+/*
 variable "key_name" {
   description = "The key name to use for the instances"
   type        = string
   default     = ""
 }
-
+*/
 variable "db_ami_id" {
   description = "The AMI ID for the DB instance"
   type        = string
