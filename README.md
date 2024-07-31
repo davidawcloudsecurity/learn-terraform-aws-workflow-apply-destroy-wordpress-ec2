@@ -6,14 +6,13 @@ alias tf="terraform"; alias tfa="terraform apply --auto-approve"; alias tfd="ter
 Install if running at cloudshell
 ```ruby
 sudo yum install -y yum-utils shadow-utils; sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo; sudo yum -y install terraform; terraform init
-
+```
 This setup includes:
 
 The EC2 instance is provisioned with MySQL and is placed in a private subnet for added security. The MySQL root password is set using a Terraform provisioner that runs a series of commands on the instance after it is created.
 ```bash
 terraform apply -var-file="terraform.tfvars.json"
 ```
-
 how to - https://docs.aws.amazon.com/codedeploy/latest/userguide/tutorials-wordpress.html
 
 how to use github actions with aws access and secret - https://spacelift.io/blog/github-actions-terraform
