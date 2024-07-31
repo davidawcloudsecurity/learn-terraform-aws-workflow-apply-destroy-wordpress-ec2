@@ -1,4 +1,5 @@
 provider "aws" {
+  version = "~> 3.0"  # Update to the latest version compatible with your setup
   region = var.region
 }
 
