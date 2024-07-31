@@ -36,7 +36,7 @@ resource "aws_nat_gateway" "main" {
 }
 
 resource "aws_eip" "main" {
-  domain = "vpc"
+#  domain = "vpc"
 }
 
 resource "aws_route_table" "public" {
