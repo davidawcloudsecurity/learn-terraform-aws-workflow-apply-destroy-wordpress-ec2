@@ -151,7 +151,7 @@ resource "aws_instance" "app" {
   instance_type = var.instance_type
   subnet_id = element(aws_subnet.private_app.*.id, 0)
   security_groups = [aws_security_group.app.id]
-  key_name = var.key_name
+#  key_name = var.key_name
 
   user_data = <<EOF
 #!/bin/bash
@@ -193,7 +193,7 @@ resource "aws_instance" "db" {
   instance_type   = var.db_instance_type
   subnet_id       = element(aws_subnet.private_db.*.id, 0)
   security_groups = [aws_security_group.db.id]
-  key_name        = var.key_name
+#  key_name        = var.key_name
 
   tags = {
     Name = "DBServer"
