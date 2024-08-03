@@ -18,21 +18,21 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "public" {
-  count = 1
-  vpc_id = aws_vpc.main.id
-  cidr_block = element(var.public_subnet_cidrs, 0)
+  count                   = 1
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = element(var.public_subnet_cidrs, 0)
   map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "private_app" {
-  count = 1
-  vpc_id = aws_vpc.main.id
+  count      = 1
+  vpc_id     = aws_vpc.main.id
   cidr_block = element(var.private_app_subnet_cidrs, 0)
 }
 
 resource "aws_subnet" "private_db" {
-  count = 1
-  vpc_id = aws_vpc.main.id
+  count      = 1
+  vpc_id     = aws_vpc.main.id
   cidr_block = element(var.private_db_subnet_cidrs, 0)
 }
 
@@ -42,11 +42,11 @@ resource "aws_internet_gateway" "main" {
 
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.main.id
-  subnet_id = element(aws_subnet.public.*.id, 0)
+  subnet_id     = element(aws_subnet.public.*.id, 0)
 }
 
 resource "aws_eip" "main" {
-#  domain = "vpc"
+  #  domain = "vpc"
 }
 
 resource "aws_route_table" "public" {
@@ -59,7 +59,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  subnet_id = element(aws_subnet.public.*.id, 0)
+  subnet_id      = element(aws_subnet.public.*.id, 0)
   route_table_id = aws_route_table.public.id
 }
 
@@ -67,18 +67,18 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.main.id
   }
 }
 
 resource "aws_route_table_association" "private_app" {
-  subnet_id = element(aws_subnet.private_app.*.id, 0)
+  subnet_id      = element(aws_subnet.private_app.*.id, 0)
   route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table_association" "private_db" {
-  subnet_id = element(aws_subnet.private_db.*.id, 0)
+  subnet_id      = element(aws_subnet.private_db.*.id, 0)
   route_table_id = aws_route_table.private.id
 }
 
@@ -111,9 +111,9 @@ resource "aws_security_group" "app" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
     security_groups = [aws_security_group.web.id]
   }
 
@@ -129,9 +129,9 @@ resource "aws_security_group" "db" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
     security_groups = [aws_security_group.app.id]
   }
 
@@ -144,12 +144,12 @@ resource "aws_security_group" "db" {
 }
 
 resource "aws_instance" "web" {
-  count = var.instance_count
-  ami = var.ami_id
-  instance_type = var.instance_type
-  subnet_id = element(aws_subnet.public.*.id, 0)
+  count           = var.instance_count
+  ami             = var.ami_id
+  instance_type   = var.instance_type
+  subnet_id       = element(aws_subnet.public.*.id, 0)
   security_groups = [aws_security_group.web.id]
-#  key_name = var.key_name
+  #  key_name = var.key_name
 
   tags = {
     Name = "WebServer-${count.index}"
@@ -157,12 +157,12 @@ resource "aws_instance" "web" {
 }
 
 resource "aws_instance" "app" {
-  count = var.instance_count
-  ami = var.ami_id
-  instance_type = var.instance_type
-  subnet_id = element(aws_subnet.private_app.*.id, 0)
+  count           = var.instance_count
+  ami             = var.ami_id
+  instance_type   = var.instance_type
+  subnet_id       = element(aws_subnet.private_app.*.id, 0)
   security_groups = [aws_security_group.app.id]
-#  key_name = var.key_name
+  #  key_name = var.key_name
 
   user_data = <<EOF
 #!/bin/bash
@@ -204,7 +204,7 @@ resource "aws_instance" "db" {
   instance_type   = var.db_instance_type
   subnet_id       = element(aws_subnet.private_db.*.id, 0)
   security_groups = [aws_security_group.db.id]
-#  key_name        = var.key_name
+  #  key_name        = var.key_name
 
   tags = {
     Name = "DBServer"
