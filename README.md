@@ -13,3 +13,5 @@ how to use github actions with aws access and secret - https://spacelift.io/blog
 https://www.pluralsight.com/resources/blog/cloud/how-to-use-github-actions-to-automate-terraform
 
 how to use github actions with openid and sts temp cred - https://xebia.com/blog/how-to-deploy-terraform-to-aws-with-github-actions-authenticated-with-openid-connect/
+
+how to allow git push - https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot
