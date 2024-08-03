@@ -28,3 +28,5 @@ how to harden git runners - https://blog.gitguardian.com/github-actions-security
 how to run github action in git - https://joht.github.io/johtizen/build/2022/01/20/github-actions-push-into-repository.html
 
 how to git push in github action - https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action
+
+how to allow git push - https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot
