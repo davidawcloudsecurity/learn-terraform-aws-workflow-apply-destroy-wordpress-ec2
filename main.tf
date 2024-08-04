@@ -144,7 +144,7 @@ resource "aws_security_group" "db" {
 }
 
 resource "aws_iam_role" "ssm_role" {
-  name = "ssm_role"
+  name = "AmazonSSMManagedInstanceRole01"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -166,16 +166,16 @@ resource "aws_iam_role_policy_attachment" "ssm_attachment" {
 }
 
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
-  name = "AmazonSSMManagedInstanceRole01"
+  name = "AmazonSSMManagedInstanceProfile01"
   role = aws_iam_role.ssm_role.name
 }
 
 resource "aws_instance" "web" {
-  count           = var.instance_count
-  ami             = var.ami_id
-  instance_type   = var.instance_type
-  subnet_id       = element(aws_subnet.public.*.id, 0)
-  security_groups = [aws_security_group.web.id]
+  count                = var.instance_count
+  ami                  = var.ami_id
+  instance_type        = var.instance_type
+  subnet_id            = element(aws_subnet.public.*.id, 0)
+  security_groups      = [aws_security_group.web.id]
   iam_instance_profile = aws_iam_instance_profile.ssm_instance_profile.name
   #  key_name = var.key_name
 
