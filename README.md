@@ -13,6 +13,38 @@ The EC2 instance is provisioned with MySQL and is placed in a private subnet for
 ```bash
 terraform apply -var-file="terraform.tfvars.json" --auto-approve -input=false
 ```
+The appropriate iam policy to allow user to deploy this terraform script
+```bash
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:GetRole",
+                "iam:CreateInstanceProfile",
+                "iam:ListRolePolicies",
+                "iam:ListAttachedRolePolicies",
+                "iam:GetInstanceProfile",
+                "iam:AddRoleToInstanceProfile",
+                "iam:PassRole"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringNotEquals": {
+                    "iam:PolicyArn": [
+                        "arn:aws:iam::aws:policy/AdministratorAccess",
+                        "arn:aws:iam::aws:policy/PowerUserAccess"
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
 how to - https://docs.aws.amazon.com/codedeploy/latest/userguide/tutorials-wordpress.html
 
 how to use github actions with aws access and secret - https://spacelift.io/blog/github-actions-terraform
