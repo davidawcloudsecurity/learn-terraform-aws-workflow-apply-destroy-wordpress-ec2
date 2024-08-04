@@ -185,20 +185,12 @@ resource "aws_instance" "web" {
 }
 
 resource "aws_instance" "app" {
-<<<<<<< Updated upstream
-  count           = var.instance_count
-  ami             = var.ami_id
-  instance_type   = var.instance_type
-  subnet_id       = element(aws_subnet.private_app.*.id, 0)
-  security_groups = [aws_security_group.app.id]
-=======
   count                = var.instance_count
   ami                  = var.ami_id
   instance_type        = var.instance_type
   subnet_id            = element(aws_subnet.private_app.*.id, 0)
   security_groups      = [aws_security_group.app.id]
   iam_instance_profile = aws_iam_instance_profile.ssm_instance_profile.name
->>>>>>> Stashed changes
   #  key_name = var.key_name
 
   user_data = <<EOF
@@ -237,18 +229,11 @@ EOF
 }
 
 resource "aws_instance" "db" {
-<<<<<<< Updated upstream
-  ami             = var.db_ami_id
-  instance_type   = var.db_instance_type
-  subnet_id       = element(aws_subnet.private_db.*.id, 0)
-  security_groups = [aws_security_group.db.id]
-=======
   ami                  = var.db_ami_id
   instance_type        = var.db_instance_type
   subnet_id            = element(aws_subnet.private_db.*.id, 0)
   security_groups      = [aws_security_group.db.id]
   iam_instance_profile = aws_iam_instance_profile.ssm_instance_profile.name
->>>>>>> Stashed changes
   #  key_name        = var.key_name
 
   tags = {
