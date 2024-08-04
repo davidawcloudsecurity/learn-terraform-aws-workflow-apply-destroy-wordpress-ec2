@@ -171,11 +171,11 @@ resource "aws_iam_instance_profile" "ssm_instance_profile" {
 }
 
 resource "aws_instance" "web" {
-  count           = var.instance_count
-  ami             = var.ami_id
-  instance_type   = var.instance_type
-  subnet_id       = element(aws_subnet.public.*.id, 0)
-  security_groups = [aws_security_group.web.id]
+  count                = var.instance_count
+  ami                  = var.ami_id
+  instance_type        = var.instance_type
+  subnet_id            = element(aws_subnet.public.*.id, 0)
+  security_groups      = [aws_security_group.web.id]
   iam_instance_profile = aws_iam_instance_profile.ssm_instance_profile.name
   #  key_name = var.key_name
 
