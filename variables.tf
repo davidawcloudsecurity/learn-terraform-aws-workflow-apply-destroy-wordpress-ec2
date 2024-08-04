@@ -37,6 +37,19 @@ variable "instance_count" {
   description = "Number of instances for each role"
   type        = number
 }
+
+variable "ssm_role" {
+  description = "Role name to use SSM"
+  type        = string
+  default     = AmazonSSMManagedInstanceRole01
+}
+
+variable "ssm_instance_profile" {
+  description = "Role name to use SSM"
+  type        = string
+  default     = AmazonSSMManagedInstanceProfile01
+}
+
 /*
 variable "key_name" {
   description = "The key name to use for the instances"
