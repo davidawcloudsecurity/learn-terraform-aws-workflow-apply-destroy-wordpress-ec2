@@ -28,14 +28,12 @@ resource "aws_subnet" "private_app" {
   count      = 1
   vpc_id     = aws_vpc.main.id
   cidr_block = element(var.private_app_subnet_cidrs, 0)
-  map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "private_db" {
   count      = 1
   vpc_id     = aws_vpc.main.id
   cidr_block = element(var.private_db_subnet_cidrs, 0)
-  map_public_ip_on_launch = true
 }
 
 resource "aws_internet_gateway" "main" {
