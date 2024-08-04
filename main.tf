@@ -45,9 +45,11 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = element(aws_subnet.public.*.id, 0)
 }
 
+/* Not sure what is this for
 resource "aws_eip" "main" {
   #  domain = "vpc"
 }
+*/
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
