@@ -30,6 +30,11 @@ The appropriate iam policy to allow user to deploy this terraform script
                 "iam:ListAttachedRolePolicies",
                 "iam:GetInstanceProfile",
                 "iam:AddRoleToInstanceProfile",
+                "iam:DetachRolePolicy",
+                "iam:ListInstanceProfilesForRole",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:DeleteRole",
                 "iam:PassRole"
             ],
             "Resource": "*",
