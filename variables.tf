@@ -41,13 +41,13 @@ variable "instance_count" {
 variable "ssm_role" {
   description = "Role name to use SSM"
   type        = string
-  default     = "AmazonSSMManagedInstanceRole02"
+  default     = "AmazonSSMManagedInstanceRole03"
 }
 
 variable "ssm_instance_profile" {
   description = "Role name to use SSM"
   type        = string
-  default     = "AmazonSSMManagedInstanceProfile02"
+  default     = "AmazonSSMManagedInstanceProfile03"
 }
 
 /*
