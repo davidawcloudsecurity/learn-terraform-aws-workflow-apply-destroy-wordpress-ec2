@@ -143,16 +143,7 @@ resource "aws_security_group" "db" {
   }
 }
 
-# Data source to check if the IAM role already exists
-data "aws_iam_role" "existing_ssm_role" {
-  count = length(lookup(data.aws_iam_roles.all_roles.roles, "AmazonSSMManagedInstanceRole01", []))
-
-  name = "AmazonSSMManagedInstanceRole01"
-}
-
 resource "aws_iam_role" "ssm_role" {
-  count = data.aws_iam_role.existing_ssm_role.*.id == [] ? 1 : 0
-
   name = "AmazonSSMManagedInstanceRole01"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -170,13 +161,13 @@ resource "aws_iam_role" "ssm_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_attachment" {
-  role       = data.aws_iam_role.existing_ssm_role.id[0] != "" ? data.aws_iam_role.existing_ssm_role.id[0] : aws_iam_role.ssm_role[0].id
+  role       = aws_iam_role.ssm_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
   name = "AmazonSSMManagedInstanceProfile01"
-  role = data.aws_iam_role.existing_ssm_role.id[0] != "" ? data.aws_iam_role.existing_ssm_role.id[0] : aws_iam_role.ssm_role[0].id
+  role = aws_iam_role.ssm_role.name
 }
 
 resource "aws_instance" "web" {
