@@ -144,7 +144,7 @@ resource "aws_security_group" "db" {
 }
 
 resource "aws_iam_role" "ssm_role" {
-  name = "ssm_role"
+  name = "AmazonSSMManagedInstanceRole01"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -166,7 +166,7 @@ resource "aws_iam_role_policy_attachment" "ssm_attachment" {
 }
 
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
-  name = "AmazonSSMManagedInstanceRole01"
+  name = "ssm_instance_profile"
   role = aws_iam_role.ssm_role.name
 }
 
