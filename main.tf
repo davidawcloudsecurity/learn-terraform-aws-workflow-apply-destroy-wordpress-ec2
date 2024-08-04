@@ -144,7 +144,7 @@ resource "aws_security_group" "db" {
 }
 
 resource "aws_iam_role" "ssm_role" {
-  name = "AmazonSSMManagedInstanceRole01"
+  name = var.ssm_role
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -166,7 +166,7 @@ resource "aws_iam_role_policy_attachment" "ssm_attachment" {
 }
 
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
-  name = "AmazonSSMManagedInstanceProfile01"
+  name = var.ssm_instance_profile
   role = aws_iam_role.ssm_role.name
 }
 
@@ -178,6 +178,40 @@ resource "aws_instance" "web" {
   security_groups      = [aws_security_group.web.id]
   iam_instance_profile = aws_iam_instance_profile.ssm_instance_profile.name
   #  key_name = var.key_name
+
+  user_data = <<EOF
+#!/bin/bash
+# Define the path to the sshd_config file
+sshd_config="/etc/ssh/sshd_config"
+
+# Define the string to be replaced
+old_string="PasswordAuthentication no"
+new_string="PasswordAuthentication yes"
+
+# Check if the file exists
+if [ -e "$sshd_config" ]; then
+    # Use sed to replace the old string with the new string
+    sudo sed -i "s/$old_string/$new_string/" "$sshd_config"
+
+    # Check if the sed command was successful
+    if [ $? -eq 0 ]; then
+        echo "String replaced successfully."
+        # Restart the SSH service to apply the changes
+        sudo service ssh restart
+    else
+        echo "Error replacing string in $sshd_config."
+    fi
+else
+    echo "File $sshd_config not found."
+fi
+
+echo "123" | passwd --stdin ec2-user
+systemctl restart sshd
+# Install Docker
+yum update -y
+yum install docker -y
+systemctl start docker; systemctl enable docker; docker pull nginx:latest;
+EOF
 
   tags = {
     Name = "WebServer-${count.index}"
