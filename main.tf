@@ -143,6 +143,11 @@ resource "aws_security_group" "db" {
   }
 }
 
+output "ssm_role" {
+  description = "Role name for SSM"
+  value       = var.ssm_role
+}
+
 resource "aws_iam_role" "ssm_role" {
   name = var.ssm_role
   assume_role_policy = jsonencode({
