@@ -215,7 +215,7 @@ systemctl restart sshd
 # Install Docker
 yum update -y
 yum install docker -y
-systemctl start docker; systemctl enable docker; docker pull nginx:latest;
+systemctl start docker; systemctl enable docker; docker pull nginx:latest; docker run -d --name nginx-dev -p 80:80 nginx:latest
 EOF
 
   tags = {
@@ -260,6 +260,10 @@ fi
 
 echo "123" | passwd --stdin ec2-user
 systemctl restart sshd
+# Install Docker
+yum update -y
+yum install docker -y
+systemctl start docker; systemctl enable docker; docker pull wordpress:latest; docker run -d --name wordpress-dev -p 80:80 wordpress:latest
 EOF
 
   tags = {
