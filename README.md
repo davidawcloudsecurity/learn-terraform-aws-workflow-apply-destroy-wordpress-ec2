@@ -67,3 +67,5 @@ how to run github action in git - https://joht.github.io/johtizen/build/2022/01/
 how to git push in github action - https://stackoverflow.com/questions/57921401/push-to-origin-from-github-action
 
 how to allow git push - https://stackoverflow.com/questions/72851548/permission-denied-to-github-actionsbot
+
+how to setup nginx/wordpress/mysql - https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-docker-compose
