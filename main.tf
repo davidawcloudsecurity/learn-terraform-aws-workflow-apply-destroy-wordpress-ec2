@@ -143,11 +143,6 @@ resource "aws_security_group" "db" {
   }
 }
 
-output "ssm_role" {
-  description = "Role name for SSM"
-  value       = var.ssm_role
-}
-
 resource "aws_iam_role" "ssm_role" {
   name = var.ssm_role
   assume_role_policy = jsonencode({
@@ -173,6 +168,10 @@ resource "aws_iam_role_policy_attachment" "ssm_attachment" {
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
   name = var.ssm_instance_profile
   role = aws_iam_role.ssm_role.name
+}
+
+output "seeds" {
+  value = [aws_instance.web.*.private_ip, aws_instance.app.*.private_ip, aws_instance.db.private_ip]
 }
 
 resource "aws_instance" "web" {
@@ -216,6 +215,53 @@ systemctl restart sshd
 yum update -y
 yum install docker -y
 systemctl start docker; systemctl enable docker; docker pull nginx:latest; docker run -d --name nginx-dev -p 80:80 nginx:latest
+cat <<\EOF1 >> default.conf
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    location / {
+        #root   /usr/share/nginx/html;
+        #index  index.html index.htm;
+        proxy_pass: 
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    #location ~ \.php$ {
+    #    root           html;
+    #    fastcgi_pass   127.0.0.1:9000;
+    #    fastcgi_index  index.php;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    include        fastcgi_params;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+}
+EOF1
 EOF
 
   tags = {
