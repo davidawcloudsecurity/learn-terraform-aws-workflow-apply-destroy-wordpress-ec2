@@ -226,7 +226,9 @@ server {
     location / {
         #root   /usr/share/nginx/html;
         #index  index.html index.htm;
-        proxy_pass: 
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://localhost:80;
     }
 
     #error_page  404              /404.html;
