@@ -171,7 +171,7 @@ resource "aws_iam_instance_profile" "ssm_instance_profile" {
 }
 
 output "seeds" {
-  value = [ aws_instance.web.private_ip, aws_instance.app.private_ip, aws_instance.db.private_ip ]
+  value = [ aws_instance.web.*.private_ip, aws_instance.app.*.private_ip, aws_instance.db.private_ip ]
 }
 
 resource "aws_instance" "web" {
