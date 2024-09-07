@@ -390,3 +390,7 @@ EOF
   }
   */
 }
+
+output "seeds" {
+  value = [ aws_instance.nginx.private_ip, aws_instance.wordpress.private_ip, aws_instance.mysql.private_ip ]
+}
