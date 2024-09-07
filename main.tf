@@ -371,7 +371,7 @@ systemctl restart sshd
 yum update -y
 yum install docker -y
 systemctl start docker; systemctl enable docker; docker pull mysql:latest;
-docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=yourpassword -e MYSQL_DATABASE${var.db_root_password} -p 3306:3306 -v mysql-data:/var/lib/mysql -d mysql:latest
+docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=${var.db_root_password} -e MYSQL_DATABASE=${var.db_name} -p 3306:3306 -v mysql-data:/var/lib/mysql -d mysql:latest
 EOF
 
   /* Remove this as I am not sure how to run this
