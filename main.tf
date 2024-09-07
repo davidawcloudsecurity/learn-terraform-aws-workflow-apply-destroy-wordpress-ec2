@@ -269,8 +269,8 @@ server {
     #}
 }
 EOF1
-docker cp default.conf nginx-demo:/etc/nginx/conf.d;
-docker exec nginx-demo nginx -s reload;
+docker cp default.conf nginx-dev:/etc/nginx/conf.d;
+docker exec nginx-dev nginx -s reload;
 EOF
 
   tags = {
