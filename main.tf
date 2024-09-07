@@ -226,7 +226,8 @@ server {
     location / {
         #root   /usr/share/nginx/html;
         #index  index.html index.htm;
-        proxy_pass http://${aws_instance.wordpress.private_ip};
+        # proxy_pass http://${aws_instance.wordpress.private_ip};
+        proxy_pass http://localhost:80;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
