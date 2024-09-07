@@ -73,6 +73,12 @@ variable "db_root_password" {
   sensitive   = true
 }
 
+variable "db_name" {
+  description = "The name for the MySql DB"
+  type        = string
+  sensitive   = true
+}
+
 variable "private_key_path" {
   description = "Path to the private key for SSH"
   type        = string
