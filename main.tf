@@ -216,6 +216,9 @@ yum update -y
 yum install docker -y
 systemctl start docker; systemctl enable docker; docker pull nginx:latest; docker run -d --name nginx-dev -p 80:80 nginx:latest;
 cat <<\EOF1 >> default.conf
+upstream backend {
+    server ${aws_instance.app[0].private_ip};
+}
 server {
     listen       80;
     listen  [::]:80;
@@ -226,7 +229,7 @@ server {
     location / {
         #root   /usr/share/nginx/html;
         #index  index.html index.htm;
-        proxy_pass http://${aws_instance.app.*.private_ip};        
+        proxy_pass http://backend;        
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
