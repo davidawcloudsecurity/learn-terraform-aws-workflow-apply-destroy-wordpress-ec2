@@ -323,6 +323,54 @@ systemctl restart sshd
 yum update -y
 yum install docker -y
 systemctl start docker; systemctl enable docker; docker pull wordpress:latest; docker run -d --name wordpress-dev -p 80:80 wordpress:latest
+
+# Sleep to ensure the container is fully up
+sleep 30
+
+# Define variables for database connection
+DB_NAME="wordpress_db"
+DB_USER="root"
+DB_PASSWORD="wp_password"
+DB_HOST="your-database-host"
+WP_HOME="http://localhost"
+WP_SITEURL="http://localhost"
+
+# Create wp-config.php dynamically on the host
+cat <<EOF2 > /tmp/wp-config.php
+<?php
+define('DB_NAME', '${var.db_name}');
+define('DB_USER', '$DB_USE');
+define('DB_PASSWORD', '${var.db_root_password}');
+define('DB_HOST', '$DB_HOST');
+define('DB_CHARSET', 'utf8');
+define('DB_COLLATE', '');
+
+define('AUTH_KEY',         '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+define('SECURE_AUTH_KEY',  '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+define('LOGGED_IN_KEY',    '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+define('NONCE_KEY',        '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+define('AUTH_SALT',        '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+define('SECURE_AUTH_SALT', '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+define('LOGGED_IN_SALT',   '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+define('NONCE_SALT',       '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+
+\$table_prefix  = 'wp_';
+
+define('WP_DEBUG', false);
+define('WP_HOME', '$WP_HOME');
+define('WP_SITEURL', '$WP_SITEURL');
+
+if ( !defined('ABSPATH') )
+    define('ABSPATH', '/var/www/html/');
+require_once(ABSPATH . 'wp-settings.php');
+EOF2
+
+# Copy wp-config.php into the running WordPress container
+docker cp /tmp/wp-config.php wordpress-dev:/var/www/html/wp-config.php
+
+# Restart the WordPress container to apply changes
+docker restart wordpress-dev
+
 EOF
 
   tags = {
