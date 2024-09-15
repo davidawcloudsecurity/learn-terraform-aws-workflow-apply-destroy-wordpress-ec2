@@ -269,6 +269,78 @@ server {
     #}
 }
 EOF1
+cat <<EOF2 > 50x.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beautiful Loading Page</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ffecd2);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .loader-container {
+            text-align: center;
+        }
+
+        .loader {
+            width: 100px;
+            height: 100px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #ffffff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: white;
+            font-size: 24px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-container">
+        <div class="loader"></div>
+        <p class="loading-text">Loading...</p>
+    </div>
+
+    <script>
+        // Simulating a loading process
+        setTimeout(() => {
+            document.querySelector('.loading-text').textContent = 'Almost there...';
+        }, 3000);
+
+        setTimeout(() => {
+            document.querySelector('.loading-text').textContent = 'Ready!';
+            document.querySelector('.loader').style.borderTopColor = '#00ff00';
+        }, 5000);
+    </script>
+</body>
+</html>
+EOF2
+docker cp 50x.html nginx-dev:/usr/share/nginx/html;
 docker cp default.conf nginx-dev:/etc/nginx/conf.d;
 docker exec nginx-dev nginx -s reload;
 EOF
@@ -364,7 +436,7 @@ require_once(ABSPATH . 'wp-settings.php');
 EOF2
 
 # add salt to wp-config.php
-cat <<EOF3 > change_salt
+cat <<EOF3 > /tmp/change_salt
 #!/bin/bash
 
 # Define the location of the wp-config.php file
@@ -405,9 +477,9 @@ echo "WordPress secret keys have been updated successfully."
 
 exit 0
 EOF3
-chmod 700 ./change_salt; ./change_salt
+chmod 700 /tmp/change_salt; /tmp/change_salt
 
-cat <<EOF4 > install_wp
+cat <<EOF4 > /tmp/install_wp
 #!/bin/bash
 
 # Define variables
@@ -445,7 +517,7 @@ rm /tmp/wp_cookie_jar
 
 exit 0
 EOF4
-chmod 700 ./install_wp; ./install_wp
+chmod 700 /tmp/install_wp; /tmp/install_wp; 
 
 # Copy wp-config.php into the running WordPress container
 docker cp /tmp/wp-config.php wordpress-dev:/var/www/html/wp-config.php
