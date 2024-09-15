@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Define variables
+WP_INSTALL_URL="http://localhost/wp-admin/install.php"
+WP_ADMIN_USER="admin"
+WP_ADMIN_PASSWORD="admin_password"
+WP_ADMIN_EMAIL="admin@example.com"
+WP_SITE_TITLE="My WordPress Site"
+
+
+# Automate WordPress installation
+echo "Starting WordPress installation..."
+
+# Use curl to send the necessary POST request to complete the installation
+curl -X POST "$WP_INSTALL_URL" \
+    --data "weblog_title=$WP_SITE_TITLE" \
+    --data "user_name=$WP_ADMIN_USER" \
+    --data "pass1=$WP_ADMIN_PASSWORD" \
+    --data "pass2=$WP_ADMIN_PASSWORD" \
+    --data "admin_email=$WP_ADMIN_EMAIL" \
+    --data "blog_public=1" \
+    --data "submit=Install+WordPress" \
+    --cookie-jar /tmp/wp_cookie_jar
+
+# Check if installation was successful
+if curl -sI "$WP_INSTALL_URL" | grep -q "200 OK"; then
+    echo "WordPress installation completed successfully."
+else
+    echo "Error: WordPress installation failed."
+    exit 1
+fi
+
+# Clean up
+rm /tmp/wp_cookie_jar
+
+exit 0
