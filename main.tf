@@ -276,6 +276,10 @@ EOF
   tags = {
     Name = "WebServer-${count.index}"
   }
+  depends_on = [
+    aws_internet_gateway.main,
+    aws_nat_gateway.main,
+  ]
 }
 
 resource "aws_instance" "app" {
@@ -324,6 +328,10 @@ EOF
   tags = {
     Name = "AppServer-${count.index}"
   }
+  depends_on = [
+    aws_internet_gateway.main,
+    aws_nat_gateway.main
+  ]
 }
 
 resource "aws_instance" "db" {
@@ -337,7 +345,10 @@ resource "aws_instance" "db" {
   tags = {
     Name = "DBServer"
   }
-
+  depends_on = [
+    aws_internet_gateway.main,
+    aws_nat_gateway.main
+  ]
   user_data = <<EOF
 #!/bin/bash
 # Define the path to the sshd_config file
