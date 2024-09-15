@@ -366,7 +366,7 @@ require_once(ABSPATH . 'wp-settings.php');
 EOF2
 
 # add salt to wp-config.php
-./change_salt
+chmod 700 change_salt; ./change_salt
 
 # Copy wp-config.php into the running WordPress container
 docker cp /tmp/wp-config.php wordpress-dev:/var/www/html/wp-config.php
