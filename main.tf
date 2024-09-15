@@ -277,8 +277,8 @@ EOF
     Name = "WebServer-${count.index}"
   }
   depends_on = [
-    aws_internet_gateway.main.id,
-    aws_nat_gateway.main.id
+    aws_internet_gateway.main,
+    aws_nat_gateway.main,
   ]
 }
 
@@ -329,8 +329,8 @@ EOF
     Name = "AppServer-${count.index}"
   }
   depends_on = [
-    aws_internet_gateway.main.id,
-    aws_nat_gateway.main.id
+    aws_internet_gateway.main,
+    aws_nat_gateway.main
   ]
 }
 
@@ -346,8 +346,8 @@ resource "aws_instance" "db" {
     Name = "DBServer"
   }
   depends_on = [
-    aws_internet_gateway.main.id,
-    aws_nat_gateway.main.id
+    aws_internet_gateway.main,
+    aws_nat_gateway.main
   ]
   user_data = <<EOF
 #!/bin/bash
