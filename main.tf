@@ -331,7 +331,7 @@ sleep 30
 DB_NAME="wordpress_db"
 DB_USER="root"
 DB_PASSWORD="wp_password"
-DB_HOST="your-database-host"
+DB_HOST="${aws_instance.db.private_ip}"
 WP_HOME="http://localhost"
 WP_SITEURL="http://localhost"
 
