@@ -339,7 +339,7 @@ WP_SITEURL="http://localhost"
 cat <<EOF2 > /tmp/wp-config.php
 <?php
 define('DB_NAME', '${var.db_name}');
-define('DB_USER', '$DB_USE');
+define('DB_USER', '$DB_USER');
 define('DB_PASSWORD', '${var.db_root_password}');
 define('DB_HOST', '$DB_HOST');
 define('DB_CHARSET', 'utf8');
