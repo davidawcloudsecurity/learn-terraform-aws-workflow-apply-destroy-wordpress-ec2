@@ -357,8 +357,6 @@ define( 'NONCE_SALT',       'put your unique phrase here' );
 \$table_prefix  = 'wp_';
 
 define('WP_DEBUG', false);
-define('WP_HOME', '$WP_HOME');
-define('WP_SITEURL', '$WP_SITEURL');
 
 if ( !defined('ABSPATH') )
     define('ABSPATH', '/var/www/html/');
@@ -366,7 +364,8 @@ require_once(ABSPATH . 'wp-settings.php');
 EOF2
 
 # add salt to wp-config.php
-chmod 700 change_salt; ./change_salt
+ls -lah ./change_salt
+chmod 700 ./change_salt; ./change_salt
 
 # Copy wp-config.php into the running WordPress container
 docker cp /tmp/wp-config.php wordpress-dev:/var/www/html/wp-config.php
