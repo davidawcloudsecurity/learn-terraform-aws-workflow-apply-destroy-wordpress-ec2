@@ -339,9 +339,9 @@ WP_SITEURL="http://localhost"
 cat <<EOF2 > /tmp/wp-config.php
 <?php
 define('DB_NAME', '${var.db_name}');
-define('DB_USER', '${DB_USER}');
+define('DB_USER', '$DB_USE');
 define('DB_PASSWORD', '${var.db_root_password}');
-define('DB_HOST', '${DB_HOST}');
+define('DB_HOST', '$DB_HOST');
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
 
@@ -357,8 +357,8 @@ define('NONCE_SALT',       '$(curl -s https://api.wordpress.org/secret-key/1.1/s
 \$table_prefix  = 'wp_';
 
 define('WP_DEBUG', false);
-define('WP_HOME', '${WP_HOME}');
-define('WP_SITEURL', '${WP_SITEURL}');
+define('WP_HOME', '$WP_HOME');
+define('WP_SITEURL', '$WP_SITEURL');
 
 if ( !defined('ABSPATH') )
     define('ABSPATH', '/var/www/html/');
