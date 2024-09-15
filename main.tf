@@ -446,31 +446,30 @@ WP_CONFIG_PATH="/tmp/wp-config.php"
 TEMP_SALTS_FILE="/tmp/wordpress_salts.txt"
 
 # Fetch the salts from the WordPress API and save them to the temporary file
-curl -s https://api.wordpress.org/secret-key/1.1/salt/ > "${TEMP_SALTS_FILE}"
+curl -s https://api.wordpress.org/secret-key/1.1/salt/ > $TEMP_SALTS_FILE
 
 # Check if the temporary file was created successfully
-if [[ ! -f "{$TEMP_SALTS_FILE}" ]]; then
+if [[ ! -f $TEMP_SALTS_FILE ]]; then
     echo "Error: Unable to fetch secret keys from WordPress API."
     exit 1
 fi
 
 # Backup the original wp-config.php file
-cp "${WP_CONFIG_PATH}" "${WP_CONFIG_PATH.bak}"
+cp $WP_CONFIG_PATH $WP_CONFIG_PATH.bak
 
 # Check if the backup was created successfully
-if [[ ! -f "${WP_CONFIG_PATH.bak}" ]]; then
+if [[ ! -f $WP_CONFIG_PATH.bak ]]; then
     echo "Error: Unable to create backup of wp-config.php."
     exit 1
 fi
 
 # Replace the existing salt definitions with the new ones
 sed -i '/AUTH_KEY/,/NONCE_SALT/ {
-    /AUTH_KEY/r '"${TEMP_SALTS_FILE}"'
+    /AUTH_KEY/r '$TEMP_SALTS_FILE'
     /AUTH_KEY/,/NONCE_SALT/d
-}' "${WP_CONFIG_PATH}"
+}' $WP_CONFIG_PATH
 
 # Remove the temporary file
-rm "${TEMP_SALTS_FILE}"
 rm $TEMP_SALTS_FILE
 rm "/$TEMP_SALTS_FILE"
 rm /$TEMP_SALTS_FILE
