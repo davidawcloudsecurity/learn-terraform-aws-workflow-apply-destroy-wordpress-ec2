@@ -446,33 +446,30 @@ WP_CONFIG_PATH="/tmp/wp-config.php"
 TEMP_SALTS_FILE="/tmp/wordpress_salts.txt"
 
 # Fetch the salts from the WordPress API and save them to the temporary file
-curl -s https://api.wordpress.org/secret-key/1.1/salt/ > $TEMP_SALTS_FILE
+curl -s https://api.wordpress.org/secret-key/1.1/salt/ > \$TEMP_SALTS_FILE
 
 # Check if the temporary file was created successfully
-if [[ ! -f $TEMP_SALTS_FILE ]]; then
+if [[ ! -f \$TEMP_SALTS_FILE ]]; then
     echo "Error: Unable to fetch secret keys from WordPress API."
     exit 1
 fi
 
 # Backup the original wp-config.php file
-cp $WP_CONFIG_PATH $WP_CONFIG_PATH.bak
+cp \$WP_CONFIG_PATH \$WP_CONFIG_PATH.bak
 
 # Check if the backup was created successfully
-if [[ ! -f $WP_CONFIG_PATH.bak ]]; then
+if [[ ! -f \$WP_CONFIG_PATH.bak ]]; then
     echo "Error: Unable to create backup of wp-config.php."
     exit 1
 fi
 
 # Replace the existing salt definitions with the new ones
 sed -i '/AUTH_KEY/,/NONCE_SALT/ {
-    /AUTH_KEY/r '$TEMP_SALTS_FILE'
+    /AUTH_KEY/r '\$TEMP_SALTS_FILE'
     /AUTH_KEY/,/NONCE_SALT/d
-}' $WP_CONFIG_PATH
+}' \$WP_CONFIG_PATH
 
 # Remove the temporary file
-rm $TEMP_SALTS_FILE
-rm "/$TEMP_SALTS_FILE"
-rm /$TEMP_SALTS_FILE
 rm \$TEMP_SALTS_FILE
 
 # Notify the user that the script has completed
@@ -492,23 +489,22 @@ WP_ADMIN_PASSWORD="admin_password"
 WP_ADMIN_EMAIL="admin@example.com"
 WP_SITE_TITLE="My WordPress Site"
 
-
 # Automate WordPress installation
 echo "Starting WordPress installation..."
 
 # Use curl to send the necessary POST request to complete the installation
-curl -X POST "$WP_INSTALL_URL" \
-    --data "weblog_title=$WP_SITE_TITLE" \
-    --data "user_name=$WP_ADMIN_USER" \
-    --data "pass1=$WP_ADMIN_PASSWORD" \
-    --data "pass2=$WP_ADMIN_PASSWORD" \
-    --data "admin_email=$WP_ADMIN_EMAIL" \
+curl -X POST "\$WP_INSTALL_URL" \
+    --data "weblog_title=\$WP_SITE_TITLE" \
+    --data "user_name=\$WP_ADMIN_USER" \
+    --data "pass1=\$WP_ADMIN_PASSWORD" \
+    --data "pass2=\$WP_ADMIN_PASSWORD" \
+    --data "admin_email=\$WP_ADMIN_EMAIL" \
     --data "blog_public=1" \
     --data "submit=Install+WordPress" \
     --cookie-jar /tmp/wp_cookie_jar
 
 # Check if installation was successful
-if curl -sI "$WP_INSTALL_URL" | grep -q "200 OK"; then
+if curl -sI "\$WP_INSTALL_URL" | grep -q "200 OK"; then
     echo "WordPress installation completed successfully."
 else
     echo "Error: WordPress installation failed."
