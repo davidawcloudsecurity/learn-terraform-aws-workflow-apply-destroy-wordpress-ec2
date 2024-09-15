@@ -436,7 +436,7 @@ require_once(ABSPATH . 'wp-settings.php');
 EOF2
 
 # add salt to wp-config.php
-cat <<EOF3 > change_salt
+cat <<EOF3 > /tmp/change_salt
 #!/bin/bash
 
 # Define the location of the wp-config.php file
@@ -477,9 +477,9 @@ echo "WordPress secret keys have been updated successfully."
 
 exit 0
 EOF3
-chmod 700 change_salt; ./change_salt
+chmod 700 /tmp/change_salt; /tmp/change_salt
 
-cat <<EOF4 > install_wp
+cat <<EOF4 > /tmp/install_wp
 #!/bin/bash
 
 # Define variables
@@ -517,7 +517,7 @@ rm /tmp/wp_cookie_jar
 
 exit 0
 EOF4
-chmod 700 install_wp; ./install_wp
+chmod 700 /tmp/install_wp; /tmp/install_wp; 
 
 # Copy wp-config.php into the running WordPress container
 docker cp /tmp/wp-config.php wordpress-dev:/var/www/html/wp-config.php
