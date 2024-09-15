@@ -345,14 +345,14 @@ define('DB_HOST', '$DB_HOST');
 define('DB_CHARSET', 'utf8');
 define('DB_COLLATE', '');
 
-define('AUTH_KEY',         '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
-define('SECURE_AUTH_KEY',  '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
-define('LOGGED_IN_KEY',    '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
-define('NONCE_KEY',        '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
-define('AUTH_SALT',        '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
-define('SECURE_AUTH_SALT', '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
-define('LOGGED_IN_SALT',   '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
-define('NONCE_SALT',       '$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)');
+define( 'AUTH_KEY',         'put your unique phrase here' );
+define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
+define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
+define( 'NONCE_KEY',        'put your unique phrase here' );
+define( 'AUTH_SALT',        'put your unique phrase here' );
+define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
+define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
+define( 'NONCE_SALT',       'put your unique phrase here' );
 
 \$table_prefix  = 'wp_';
 
@@ -364,6 +364,9 @@ if ( !defined('ABSPATH') )
     define('ABSPATH', '/var/www/html/');
 require_once(ABSPATH . 'wp-settings.php');
 EOF2
+
+# add salt to wp-config.php
+./change_salt
 
 # Copy wp-config.php into the running WordPress container
 docker cp /tmp/wp-config.php wordpress-dev:/var/www/html/wp-config.php
