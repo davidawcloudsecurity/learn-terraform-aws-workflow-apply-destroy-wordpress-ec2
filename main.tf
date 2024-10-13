@@ -143,7 +143,13 @@ resource "aws_security_group" "db" {
   }
 }
 
+# Look for the existing role
+data "aws_iam_role" "existing_role" {
+  name = var.ssm_role
+}
+
 resource "aws_iam_role" "ssm_role" {
+#  count = length(data.aws_iam_role.existing_role.*.id) == 0 ? 1 : 0
   name = var.ssm_role
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -161,13 +167,13 @@ resource "aws_iam_role" "ssm_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_attachment" {
-  role       = aws_iam_role.ssm_role
+  role       = aws_iam_role.ssm_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
   name = var.ssm_instance_profile
-  role = aws_iam_role.ssm_role
+  role = aws_iam_role.ssm_role.name
 }
 
 output "seeds" {
