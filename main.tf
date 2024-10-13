@@ -167,13 +167,13 @@ resource "aws_iam_role" "ssm_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_attachment" {
-  role       = aws_iam_role.ssm_role.name
+  role       = aws_iam_role.ssm_role[count.index]
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
   name = var.ssm_instance_profile
-  role = aws_iam_role.ssm_role.name
+  role = aws_iam_role.ssm_role[count.index]
 }
 
 output "seeds" {
