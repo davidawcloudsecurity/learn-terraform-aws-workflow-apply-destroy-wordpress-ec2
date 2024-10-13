@@ -143,7 +143,14 @@ resource "aws_security_group" "db" {
   }
 }
 
+# Look for the existing role
+data "aws_iam_role" "existing_role" {
+  name  = var.ssm_role
+  count = 0
+}
+
 resource "aws_iam_role" "ssm_role" {
+  #  count = length(data.aws_iam_role.existing_role.*.id) == 0 ? 1 : 0
   name = var.ssm_role
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
