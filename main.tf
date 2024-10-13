@@ -146,6 +146,7 @@ resource "aws_security_group" "db" {
 # Look for the existing role
 data "aws_iam_role" "existing_role" {
   name = var.ssm_role
+  count = 0
 }
 
 resource "aws_iam_role" "ssm_role" {
